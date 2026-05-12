@@ -1,0 +1,144 @@
+{
+  "usuarios": [
+    {
+      "id": 1,
+      "nombre": "Administrador",
+      "username": "admin",
+      "password": "$2a$10$/HmvbmNt/dfwEWZqEN0ji.mZ6.mfUrQqLB2sMbwMnx3hApXZwr1Q.",
+      "nivel": 3,
+      "estado": "activo",
+      "notas": "",
+      "progreso": 0,
+      "ultimo_video": "—",
+      "es_admin": true,
+      "creado_en": "2026-03-10T01:10:04.363Z"
+    },
+    {
+      "id": 2,
+      "nombre": "Marcos Rodríguez",
+      "username": "marcos_r",
+      "password": "$2a$10$uWZxlRrj7d/76/Fd/NVJVOISuVrpV3eb3ZBxf.iQSRdu2s.mDBeNm",
+      "nivel": 1,
+      "estado": "activo",
+      "notas": "",
+      "progreso": 29,
+      "ultimo_video": "llave de pierna",
+      "es_admin": false,
+      "creado_en": "2026-03-10T01:10:04.426Z"
+    }
+  ],
+  "videos": [
+    {
+      "id": 1,
+      "num": "01",
+      "title": "prueba 1",
+      "descripcion": "inicio",
+      "nivel": 1,
+      "duracion": "8 min",
+      "vimeo_id": "",
+      "pair_id": null,
+      "pair_label": "",
+      "estado": "publicado",
+      "creado_en": "2026-03-10T01:10:04.428Z"
+    },
+    {
+      "id": 2,
+      "num": "02",
+      "title": "Posición de Guardia Cerrada",
+      "descripcion": "Control desde abajo. Cómo mantener al rival dentro y preparar el ataque.",
+      "nivel": 1,
+      "duracion": "10 min",
+      "vimeo_id": "",
+      "pair_id": 3,
+      "pair_label": "Cómo Pasar la Guardia",
+      "estado": "publicado",
+      "creado_en": "2026-03-10T01:10:04.428Z"
+    },
+    {
+      "id": 3,
+      "num": "03",
+      "title": "Cómo Pasar la Guardia",
+      "descripcion": "Técnicas de apertura y pasaje. Correlativo al video 02.",
+      "nivel": 1,
+      "duracion": "11 min",
+      "vimeo_id": "",
+      "pair_id": 2,
+      "pair_label": "Posición de Guardia Cerrada",
+      "estado": "publicado",
+      "creado_en": "2026-03-10T01:10:04.428Z"
+    },
+    {
+      "id": 4,
+      "num": "04",
+      "title": "Llave de Brazo — Juji Gatame",
+      "descripcion": "Ejecución desde guardia. Control de caderas y finalización.",
+      "nivel": 1,
+      "duracion": "12 min",
+      "vimeo_id": "",
+      "pair_id": 5,
+      "pair_label": "Escapar del Juji Gatame",
+      "estado": "publicado",
+      "creado_en": "2026-03-10T01:10:04.428Z"
+    },
+    {
+      "id": 5,
+      "num": "05",
+      "title": "Escapar del Juji Gatame",
+      "descripcion": "Defensa y salida del juji. El escape más importante del nivel 1.",
+      "nivel": 1,
+      "duracion": "9 min",
+      "vimeo_id": "",
+      "pair_id": 4,
+      "pair_label": "Llave de Brazo — Juji Gatame",
+      "estado": "publicado",
+      "creado_en": "2026-03-10T01:10:04.428Z"
+    },
+    {
+      "id": 6,
+      "num": "06",
+      "title": "Triángulo desde Guardia",
+      "descripcion": "Ataque con piernas al cuello. Setup y finalización.",
+      "nivel": 1,
+      "duracion": "13 min",
+      "vimeo_id": "",
+      "pair_id": 7,
+      "pair_label": "Defensa del Triángulo",
+      "estado": "publicado",
+      "creado_en": "2026-03-10T01:10:04.428Z"
+    },
+    {
+      "id": 8,
+      "title": "llave de pierna",
+      "descripcion": "en este video vamos a trabajar sobre una llave de pierna.....",
+      "nivel": 1,
+      "duracion": "00.31",
+      "vimeo_id": "1184941328",
+      "pair_id": null,
+      "pair_label": "",
+      "estado": "publicado",
+      "num": "08",
+      "creado_en": "2026-04-20T20:18:15.051Z"
+    }
+  ],
+  "progreso": [
+    {
+      "id": 1,
+      "usuario_id": 2,
+      "video_id": 8,
+      "completado": true,
+      "visto_en": "2026-04-20T20:33:49.441Z"
+    },
+    {
+      "id": 2,
+      "usuario_id": 2,
+      "video_id": 7,
+      "completado": true,
+      "visto_en": "2026-04-20T20:20:21.000Z"
+    }
+  ],
+  "_counters": {
+    "usuarios": 3,
+    "videos": 8,
+    "progreso": 2
+  }
+}

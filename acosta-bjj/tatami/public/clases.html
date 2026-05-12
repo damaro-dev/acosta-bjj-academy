@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACOSTA BJJ — Mis Clases</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Crimson+Pro:ital@1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --negro: #080808;
+    --carbon: #111111;
+    --grafito: #161616;
+    --grafito2: #1c1c1c;
+    --borde: #272727;
+    --borde2: #333;
+    --rojo: #c0392b;
+    --rojo-vivo: #e74c3c;
+    --rojo-suave: rgba(192,57,43,0.12);
+    --blanco: #f0ece4;
+    --gris: #777;
+    --gris2: #555;
+    --verde: #27ae60;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--negro);
+    color: var(--blanco);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* GRAIN */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9000;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: 260px;
+    background: var(--carbon);
+    border-right: 1px solid var(--borde);
+    display: flex;
+    flex-direction: column;
+    z-index: 200;
+    overflow-y: auto;
+  }
+
+  .sidebar-logo {
+    padding: 32px 28px 24px;
+    border-bottom: 1px solid var(--borde);
+    flex-shrink: 0;
+  }
+  .sidebar-logo a {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.12em;
+    color: var(--blanco);
+    text-decoration: none;
+  }
+  .sidebar-logo a span { color: var(--rojo); }
+
+  .sidebar-user {
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--borde);
+    flex-shrink: 0;
+  }
+  .user-avatar {
+    width: 40px; height: 40px;
+    background: var(--rojo-suave);
+    border: 1px solid var(--rojo);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: var(--rojo);
+    margin-bottom: 10px;
+  }
+  .user-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--blanco);
+  }
+  .user-level {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gris);
+    margin-top: 3px;
+  }
+
+  .sidebar-nav {
+    padding: 24px 0;
+    flex: 1;
+  }
+  .nav-section-title {
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gris2);
+    padding: 0 28px 12px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 28px;
+    font-size: 0.82rem;
+    color: var(--gris);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-left: 2px solid transparent;
+    text-decoration: none;
+  }
+  .nav-item:hover { color: var(--blanco); background: var(--grafito); }
+  .nav-item.active {
+    color: var(--blanco);
+    border-left-color: var(--rojo);
+    background: var(--rojo-suave);
+  }
+  .nav-item .icon { font-size: 1rem; width: 20px; text-align: center; }
+
+  .nav-separator { height: 1px; background: var(--borde); margin: 16px 28px; }
+
+  .sidebar-progress {
+    padding: 20px 28px;
+    border-top: 1px solid var(--borde);
+    flex-shrink: 0;
+  }
+  .progress-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gris);
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .progress-label span { color: var(--rojo); }
+  .progress-bar {
+    height: 3px;
+    background: var(--borde);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--rojo);
+    width: 35%;
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+
+  .btn-logout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 16px 28px;
+    padding: 10px 16px;
+    background: none;
+    border: 1px solid var(--borde);
+    color: var(--gris2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: calc(100% - 56px);
+  }
+  .btn-logout:hover { border-color: var(--rojo); color: var(--rojo); }
+
+  /* ── MAIN ── */
+  .main {
+    margin-left: 260px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(8,8,8,0.95);
+    border-bottom: 1px solid var(--borde);
+    padding: 18px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    backdrop-filter: blur(12px);
+  }
+
+  .topbar-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.1em;
+    color: var(--blanco);
+  }
+
+  .level-pills {
+    display: flex;
+    gap: 8px;
+  }
+  .pill {
+    padding: 7px 18px;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: 1px solid var(--borde);
+    color: var(--gris);
+    cursor: pointer;
+    transition: all 0.25s;
+    background: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .pill:hover { border-color: var(--gris); color: var(--blanco); }
+  .pill.active {
+    background: var(--rojo);
+    border-color: var(--rojo);
+    color: var(--blanco);
+  }
+
+  /* ── CONTENIDO ── */
+  .content {
+    padding: 48px;
+    flex: 1;
+  }
+
+  /* VIDEO DESTACADO */
+  .featured-section {
+    margin-bottom: 56px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .section-eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rojo);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-eyebrow::before {
+    content: ''; display: block;
+    width: 20px; height: 1px;
+    background: var(--rojo);
+  }
+
+  .featured-card {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 0;
+    background: var(--carbon);
+    border: 1px solid var(--borde);
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .featured-card:hover { border-color: var(--borde2); }
+
+  /* PLAYER PROTEGIDO */
+  .video-player-wrap {
+    position: relative;
+    background: #000;
+    aspect-ratio: 16/9;
+  }
+
+  .video-player-wrap iframe {
+    width: 100%; height: 100%;
+    display: block;
+    pointer-events: auto;
+  }
+
+  /* Capa anti-descarga: bloquea clic derecho y drag */
+  .video-shield {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    background: transparent;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+  /* Permitir que los controles del iframe funcionen */
+  .video-shield.playing { pointer-events: none; }
+
+  .video-placeholder {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .video-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg, transparent, transparent 30px,
+      rgba(192,57,43,0.03) 30px, rgba(192,57,43,0.03) 32px
+    );
+  }
+  .video-placeholder:hover .play-btn { transform: scale(1.08); }
+
+  .play-btn {
+    width: 72px; height: 72px;
+    border: 2px solid var(--rojo);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.3s;
+    position: relative;
+    z-index: 1;
+  }
+  .play-btn::after {
+    content: '';
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 12px 0 12px 22px;
+    border-color: transparent transparent transparent var(--rojo);
+    margin-left: 4px;
+  }
+
+  .placeholder-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.08em;
+    color: var(--blanco);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .placeholder-sub {
+    font-size: 0.78rem;
+    color: var(--gris);
+    position: relative;
+    z-index: 1;
+  }
+
+  .featured-info {
+    padding: 40px 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-left: 1px solid var(--borde);
+  }
+
+  .featured-meta {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .meta-badge {
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border: 1px solid var(--borde);
+    color: var(--gris);
+  }
+  .meta-badge.red { border-color: var(--rojo); color: var(--rojo); }
+
+  .featured-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  .featured-desc {
+    font-size: 0.85rem;
+    color: var(--gris);
+    line-height: 1.75;
+    font-family: 'DM Sans', sans-serif;
+    flex: 1;
+  }
+
+  .featured-pairing {
+    margin-top: 24px;
+    padding: 16px;
+    background: var(--grafito);
+    border: 1px solid var(--borde);
+  }
+  .pairing-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gris2);
+    margin-bottom: 8px;
+  }
+  .pairing-link {
+    font-size: 0.82rem;
+    color: var(--rojo);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+  .pairing-link:hover { color: var(--rojo-vivo); }
+  .pairing-link::before { content: '→'; }
+
+  /* ── GRILLA DE VIDEOS ── */
+  .videos-section {
+    animation: fadeUp 0.7s ease 0.1s both;
+  }
+
+  .videos-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+  .videos-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.06em;
+  }
+  .videos-count {
+    font-size: 0.75rem;
+    color: var(--gris);
+    letter-spacing: 0.1em;
+  }
+
+  .videos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .video-card {
+    background: var(--carbon);
+    border: 1px solid var(--borde);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .video-card:hover {
+    border-color: var(--borde2);
+    transform: translateY(-3px);
+    z-index: 1;
+  }
+  .video-card.locked { opacity: 0.5; cursor: not-allowed; }
+  .video-card.locked:hover { transform: none; }
+
+  .video-thumb {
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg, #0f0f0f, #1c1c1c);
+    position: relative;
+    overflow: hidden;
+  }
+  .video-thumb::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg, transparent, transparent 20px,
+      rgba(255,255,255,0.01) 20px, rgba(255,255,255,0.01) 21px
+    );
+  }
+
+  .thumb-num {
+    position: absolute;
+    top: 12px; left: 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(240,236,228,0.08);
+    line-height: 1;
+  }
+
+  .thumb-play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+    background: rgba(0,0,0,0.4);
+  }
+  .video-card:not(.locked):hover .thumb-play { opacity: 1; }
+
+  .thumb-play-icon {
+    width: 44px; height: 44px;
+    border: 1.5px solid var(--rojo);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .thumb-play-icon::after {
+    content: '';
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 7px 0 7px 13px;
+    border-color: transparent transparent transparent var(--rojo);
+    margin-left: 3px;
+  }
+
+  .lock-icon {
+    position: absolute;
+    inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem;
+    opacity: 0.3;
+  }
+
+  .video-card-body {
+    padding: 18px 20px;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .card-num {
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gris2);
+  }
+  .card-duration {
+    font-size: 0.7rem;
+    color: var(--gris2);
+  }
+
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+
+  .card-desc {
+    font-size: 0.76rem;
+    color: var(--gris);
+    line-height: 1.6;
+  }
+
+  .card-pair {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--borde);
+    font-size: 0.7rem;
+    color: var(--gris2);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-pair-link { color: var(--rojo); cursor: pointer; }
+  .card-pair-link:hover { color: var(--rojo-vivo); text-decoration: underline; }
+
+  .card-completed {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 20px; height: 20px;
+    background: var(--verde);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.6rem;
+    color: #fff;
+  }
+
+  /* MODAL VIDEO */
+  .video-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.96);
+    z-index: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    backdrop-filter: blur(16px);
+  }
+  .video-modal.active { opacity: 1; pointer-events: all; }
+
+  .video-modal-inner {
+    width: 90%;
+    max-width: 960px;
+    transform: scale(0.95);
+    transition: transform 0.3s;
+  }
+  .video-modal.active .video-modal-inner { transform: scale(1); }
+
+  .video-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 20px;
+  }
+  .video-modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 0.06em;
+  }
+  .modal-close-btn {
+    background: none;
+    border: 1px solid var(--borde);
+    color: var(--gris);
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .modal-close-btn:hover { border-color: var(--rojo); color: var(--rojo); }
+
+  .video-modal-player {
+    position: relative;
+    aspect-ratio: 16/9;
+    background: #000;
+    overflow: hidden;
+  }
+
+  /* IFRAME VIMEO — domain lock del lado de Vimeo */
+  .video-modal-player iframe {
+    width: 100%; height: 100%;
+    display: block;
+    border: none;
+  }
+
+  /* Escudo sobre el video: bloquea clic derecho, inspección, descarga */
+  .video-modal-shield {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    background: transparent;
+    user-select: none;
+    -webkit-user-drag: none;
+    /* pointer-events: none para dejar pasar clics al iframe */
+    pointer-events: none;
+  }
+
+  .video-modal-footer {
+    padding-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--borde);
+    margin-top: 16px;
+  }
+  .modal-pair-info {
+    font-size: 0.78rem;
+    color: var(--gris);
+  }
+  .modal-pair-info a { color: var(--rojo); cursor: pointer; text-decoration: none; }
+  .modal-pair-info a:hover { color: var(--rojo-vivo); }
+
+  .modal-nav {
+    display: flex;
+    gap: 8px;
+  }
+  .modal-nav-btn {
+    background: none;
+    border: 1px solid var(--borde);
+    color: var(--gris);
+    padding: 8px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .modal-nav-btn:hover { border-color: var(--gris); color: var(--blanco); }
+
+  /* ANIMACIONES */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* MOBILE SIDEBAR TOGGLE */
+  .mobile-nav-btn {
+    display: none;
+    position: fixed;
+    top: 16px; left: 16px;
+    z-index: 300;
+    background: var(--carbon);
+    border: 1px solid var(--borde);
+    color: var(--blanco);
+    width: 44px; height: 44px;
+    align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+
+  @media (max-width: 1100px) {
+    .videos-grid { grid-template-columns: repeat(2, 1fr); }
+    .featured-card { grid-template-columns: 1fr; }
+    .featured-info { border-left: none; border-top: 1px solid var(--borde); }
+  }
+
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; }
+    .mobile-nav-btn { display: flex; }
+    .topbar { padding: 16px 20px 16px 72px; }
+    .content { padding: 24px 20px; }
+    .videos-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body oncontextmenu="return false;">
+
+<!-- Mobile nav button -->
+<button class="mobile-nav-btn" onclick="toggleSidebar()">☰</button>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <a href="#">ACOSTA BJJ <span>ACADEMY</span></a>
+  </div>
+
+  <div class="sidebar-user">
+    <div class="user-avatar" id="userInitial">M</div>
+    <div class="user-name" id="userName">Marcos Rodríguez</div>
+    <div class="user-level">Nivel: Fundamentos</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-title">Programa</div>
+    <a class="nav-item active" href="#" onclick="filterLevel('all'); return false;">
+      <span class="icon">▤</span> Todos los videos
+    </a>
+    <a class="nav-item" href="#" onclick="filterLevel(1); return false;">
+      <span class="icon">①</span> Fundamentos
+    </a>
+    <a class="nav-item" href="#" onclick="filterLevel(2); return false;">
+      <span class="icon">②</span> Control
+    </a>
+    <a class="nav-item" href="#" onclick="filterLevel(3); return false;">
+      <span class="icon">③</span> Dominio
+    </a>
+    <div class="nav-separator"></div>
+    <div class="nav-section-title">Mi cuenta</div>
+    <a class="nav-item" href="#">
+      <span class="icon">◈</span> Mi progreso
+    </a>
+  </nav>
+
+  <div class="sidebar-progress">
+    <div class="progress-label">
+      Progreso general <span>7/20</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <button class="btn-logout" onclick="window.location='#'">
+    ← Cerrar sesión
+  </button>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-title">Mis Clases</div>
+    <div class="level-pills">
+      <button class="pill active" onclick="setPill(this,'all')">Todos</button>
+      <button class="pill" onclick="setPill(this,1)">Fundamentos</button>
+      <button class="pill" onclick="setPill(this,2)">Control</button>
+      <button class="pill" onclick="setPill(this,3)">Dominio</button>
+    </div>
+  </div>
+
+  <!-- CONTENIDO -->
+  <div class="content">
+
+    <!-- VIDEO DESTACADO / EN CURSO -->
+    <div class="featured-section" id="featuredSection">
+      <div class="section-eyebrow">Continuar donde dejaste</div>
+      <div class="featured-card">
+        <div class="video-player-wrap">
+          <div class="video-placeholder" onclick="openVideo(0)" id="featuredThumb">
+            <div class="play-btn"></div>
+            <div class="placeholder-title">LLAVE DE BRAZO — JUJI GATAME</div>
+            <div class="placeholder-sub">Técnica 04 · Fundamentos · 12 min</div>
+          </div>
+          <!-- Cuando se active con Vimeo: -->
+          <!-- <iframe src="https://player.vimeo.com/video/VIDEO_ID?byline=0&portrait=0&title=0&dnt=1" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe> -->
+          <div class="video-shield" id="featuredShield"></div>
+        </div>
+        <div class="featured-info">
+          <div>
+            <div class="featured-meta">
+              <span class="meta-badge red">En curso</span>
+              <span class="meta-badge">Fundamentos</span>
+              <span class="meta-badge">12 min</span>
+            </div>
+            <div class="featured-title">Llave de Brazo —<br>Juji Gatame</div>
+            <p class="featured-desc">
+              Ejecución completa del juji gatame desde la posición de guardia cerrada. Control de caderas, palanca y finalización. Esta es la técnica correlativa al video 03.
+            </p>
+          </div>
+          <div class="featured-pairing">
+            <div class="pairing-label">Video correlativo →</div>
+            <a class="pairing-link" onclick="openVideo(4); return false;" href="#">
+              Cómo escapar del Juji Gatame
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRILLA DE VIDEOS -->
+    <div class="videos-section">
+      <div class="videos-header">
+        <div class="videos-title">Biblioteca Técnica</div>
+        <div class="videos-count" id="videoCount">20 clases</div>
+      </div>
+      <div class="videos-grid" id="videosGrid">
+        <!-- JS lo genera -->
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- MODAL REPRODUCTOR -->
+<div class="video-modal" id="videoModal">
+  <div class="video-modal-inner">
+    <div class="video-modal-header">
+      <div class="video-modal-title" id="modalTitle">—</div>
+      <button class="modal-close-btn" onclick="closeVideoModal()">✕</button>
+    </div>
+    <div class="video-modal-player">
+      <!-- Acá se inyecta el iframe de Vimeo con domain lock -->
+      <div id="modalPlayerContent" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#0a0a0a;flex-direction:column;gap:16px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.1em;color:#555;">VIMEO PLAYER</div>
+        <div style="font-size:0.78rem;color:#444;text-align:center;max-width:320px;line-height:1.7;">
+          Acá se embebe el iframe de Vimeo con domain lock activo.<br>El video solo se reproduce en tu dominio.
+        </div>
+        <!-- Ejemplo del iframe que va acá:
+        <iframe src="https://player.vimeo.com/video/VIDEO_ID?byline=0&portrait=0&title=0&dnt=1&pip=0"
+          frameborder="0" allow="autoplay; fullscreen" allowfullscreen
+          style="width:100%;height:100%;position:absolute;inset:0;">
+        </iframe>
+        -->
+      </div>
+      <div class="video-modal-shield"></div>
+    </div>
+    <div class="video-modal-footer">
+      <div class="modal-pair-info" id="modalPairInfo"></div>
+      <div class="modal-nav">
+        <button class="modal-nav-btn" onclick="prevVideo()">← Anterior</button>
+        <button class="modal-nav-btn" onclick="nextVideo()">Siguiente →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let videos = [];
+let currentFilter = 'all';
+let currentVideoId = null;
+
+// ── CARGAR DATOS DEL BACKEND ──────────────────────────────────
+async function init() {
+  // Verificar sesión
+  try {
+    const meRes = await fetch('/api/me');
+    if (!meRes.ok) { window.location.href = '/'; return; }
+    const me = await meRes.json();
+    if (!me.logueado) { window.location.href = '/'; return; }
+
+    // Mostrar nombre e inicial del usuario
+    document.getElementById('userName').textContent = me.nombre;
+    document.getElementById('userInitial').textContent = me.nombre.charAt(0).toUpperCase();
+
+    // Si es admin, redirigir al panel
+    if (me.esAdmin) { window.location.href = '/admin'; return; }
+
+  } catch (e) {
+    window.location.href = '/'; return;
+  }
+
+  // Cargar videos
+  try {
+    const res = await fetch('/api/videos');
+    if (!res.ok) { window.location.href = '/'; return; }
+    videos = await res.json();
+    renderGrid('all');
+
+    // Progreso
+    const completados = videos.filter(v => v.completado).length;
+    const total = videos.filter(v => !v.locked).length;
+    const pct = total > 0 ? Math.round((completados / total) * 100) : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.querySelector('.progress-label span').textContent = `${completados}/${total}`;
+
+    // Último video en curso (primer no completado y no bloqueado)
+    const enCurso = videos.find(v => !v.completado && !v.locked);
+    if (enCurso) {
+      document.querySelector('.placeholder-title').textContent = enCurso.title;
+      document.querySelector('.placeholder-sub').textContent = `Técnica ${enCurso.num} · ${levelName(enCurso.nivel)} · ${enCurso.duracion}`;
+      document.getElementById('featuredThumb').onclick = () => openVideoById(enCurso.id);
+    }
+  } catch (e) {
+    console.error('Error cargando videos', e);
+  }
+}
+
+// ── RENDER GRILLA ─────────────────────────────────────────────
+function renderGrid(filter) {
+  const grid = document.getElementById('videosGrid');
+  const filtered = filter === 'all' ? videos : videos.filter(v => v.nivel === filter);
+  document.getElementById('videoCount').textContent = filtered.length + ' clases';
+
+  grid.innerHTML = filtered.map(v => `
+    <div class="video-card ${v.locked ? 'locked' : ''}" onclick="${v.locked ? 'alertLocked()' : 'openVideoById('+v.id+')'}">
+      <div class="video-thumb">
+        <div class="thumb-num">${v.num}</div>
+        ${v.completado ? '<div class="card-completed">✓</div>' : ''}
+        ${v.locked
+          ? '<div class="lock-icon">🔒</div>'
+          : '<div class="thumb-play"><div class="thumb-play-icon"></div></div>'
+        }
+      </div>
+      <div class="video-card-body">
+        <div class="card-meta">
+          <span class="card-num">Técnica ${v.num} · ${levelName(v.nivel)}</span>
+          <span class="card-duration">${v.duracion}</span>
+        </div>
+        <div class="card-title">${v.title}</div>
+        <div class="card-desc">${v.descripcion}</div>
+        ${v.pair_id ? `
+          <div class="card-pair">
+            Correlativo:
+            <span class="card-pair-link" onclick="event.stopPropagation(); openVideoById(${v.pair_id});">
+              ${v.pair_label}
+            </span>
+          </div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function levelName(l) { return ['','Fundamentos','Control','Dominio'][l] || ''; }
+function alertLocked() { alert('🔒 Este nivel se desbloquea al completar los anteriores.'); }
+
+// ── FILTRO ────────────────────────────────────────────────────
+function filterLevel(level) {
+  currentFilter = level;
+  renderGrid(level);
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+
+function setPill(btn, level) {
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = level;
+  renderGrid(level);
+}
+
+// ── MODAL VIDEO ───────────────────────────────────────────────
+function openVideoById(id) {
+  const v = videos.find(x => x.id === id);
+  if (!v || v.locked) return;
+  currentVideoId = id;
+
+  document.getElementById('modalTitle').textContent = `${v.num} — ${v.title}`;
+
+  // Player: Vimeo si tiene ID, sino placeholder
+  const playerEl = document.getElementById('modalPlayerContent');
+  if (v.vimeo_id) {
+    playerEl.innerHTML = `
+      <iframe src="https://player.vimeo.com/video/${v.vimeo_id}?byline=0&portrait=0&title=0&dnt=1&pip=0"
+        frameborder="0" allow="autoplay; fullscreen" allowfullscreen
+        style="position:absolute;inset:0;width:100%;height:100%;border:none;">
+      </iframe>`;
+  } else {
+    playerEl.innerHTML = `
+      <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#0a0a0a;flex-direction:column;gap:16px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.1em;color:#555;">${v.title}</div>
+        <div style="font-size:0.78rem;color:#444;text-align:center;max-width:320px;line-height:1.7;">
+          Video próximamente disponible.<br>El instructor aún no subió este contenido.
+        </div>
+      </div>`;
+  }
+
+  const pairInfo = document.getElementById('modalPairInfo');
+  pairInfo.innerHTML = v.pair_id
+    ? `Video correlativo: <a onclick="openVideoById(${v.pair_id})">${v.pair_label}</a>`
+    : '';
+
+  document.getElementById('videoModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  // Marcar como visto
+  fetch(`/api/videos/${id}/completar`, { method: 'POST' }).catch(() => {});
+}
+
+function closeVideoModal() {
+  document.getElementById('videoModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function prevVideo() {
+  const unlocked = videos.filter(v => !v.locked);
+  const idx = unlocked.findIndex(v => v.id === currentVideoId);
+  if (idx > 0) openVideoById(unlocked[idx - 1].id);
+}
+function nextVideo() {
+  const unlocked = videos.filter(v => !v.locked);
+  const idx = unlocked.findIndex(v => v.id === currentVideoId);
+  if (idx < unlocked.length - 1) openVideoById(unlocked[idx + 1].id);
+}
+
+document.getElementById('videoModal').addEventListener('click', function(e) {
+  if (e.target === this) closeVideoModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeVideoModal();
+  if (e.key === 'ArrowRight') nextVideo();
+  if (e.key === 'ArrowLeft') prevVideo();
+});
+document.addEventListener('contextmenu', e => {
+  if (e.target.closest('.video-player-wrap, .video-modal-player')) e.preventDefault();
+});
+
+// ── SIDEBAR ───────────────────────────────────────────────────
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// Logout
+document.querySelector('.btn-logout').addEventListener('click', async () => {
+  await fetch('/api/logout', { method: 'POST' });
+  window.location.href = '/';
+});
+
+// ── ARRANCAR ──────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>

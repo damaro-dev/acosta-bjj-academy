@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mestre — Seminarios y Visitas | ACOSTA BJJ ACADEMY</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Crimson+Pro:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --negro: #080808;
+    --carbon: #111111;
+    --grafito: #1a1a1a;
+    --borde: #2a2a2a;
+    --rojo: #c0392b;
+    --rojo-vivo: #e74c3c;
+    --blanco: #f0ece4;
+    --gris: #888;
+    --gris-claro: #555;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--negro);
+    color: var(--blanco);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 60px;
+    background: linear-gradient(to bottom, rgba(8,8,8,0.95), transparent);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.2em;
+    text-decoration: none;
+    color: var(--blanco);
+  }
+  .nav-logo span { color: var(--rojo); }
+  .btn-nav {
+    background: transparent;
+    color: var(--blanco);
+    padding: 10px 24px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: 1px solid var(--borde);
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  .btn-nav:hover { background: var(--rojo); border-color: var(--rojo); }
+
+  /* HEADER */
+  .page-header {
+    padding: 160px 60px 80px;
+    border-bottom: 1px solid var(--borde);
+    position: relative;
+  }
+  .page-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 60px;
+    width: 60px; height: 2px;
+    background: var(--rojo);
+  }
+  .page-tag {
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--rojo);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .page-tag::before {
+    content: '';
+    display: block;
+    width: 32px; height: 1px;
+    background: var(--rojo);
+  }
+  .page-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 8vw, 8rem);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+  }
+  .page-subtitle {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--gris);
+    margin-top: 24px;
+    max-width: 500px;
+    line-height: 1.6;
+  }
+  .page-count {
+    margin-top: 32px;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gris);
+  }
+  .page-count span { color: var(--rojo); font-size: 1.4rem; font-family: 'Bebas Neue', sans-serif; vertical-align: middle; margin-right: 8px; }
+
+  /* FILTROS */
+  .filtros {
+    padding: 40px 60px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--borde);
+  }
+  .filtro-btn {
+    background: transparent;
+    color: var(--gris);
+    padding: 8px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--borde);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .filtro-btn:hover, .filtro-btn.active {
+    background: var(--rojo);
+    border-color: var(--rojo);
+    color: var(--blanco);
+  }
+
+  /* GRID */
+  .seminarios-container {
+    padding: 60px 60px 100px;
+  }
+  .seminarios-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .seminario-card {
+    background: var(--grafito);
+    border: 1px solid var(--borde);
+    padding: 36px 32px;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+  .seminario-card:hover {
+    border-color: var(--rojo);
+    background: rgba(192,57,43,0.05);
+  }
+  .seminario-flag {
+    font-size: 2.2rem;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .seminario-fecha {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--rojo);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .seminario-ciudad {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.05em;
+    color: var(--blanco);
+    margin-bottom: 6px;
+    line-height: 1.1;
+  }
+  .seminario-pais {
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gris-claro);
+    margin-bottom: 10px;
+  }
+  .seminario-academia {
+    font-size: 0.88rem;
+    color: var(--gris);
+    font-style: italic;
+    border-top: 1px solid var(--borde);
+    padding-top: 12px;
+    margin-top: 12px;
+  }
+  .seminario-num {
+    position: absolute;
+    top: 20px; right: 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: rgba(192,57,43,0.12);
+    line-height: 1;
+  }
+
+  /* FOOTER */
+  .page-footer {
+    padding: 40px 60px;
+    border-top: 1px solid var(--borde);
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--gris);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .page-footer a { color: var(--rojo); text-decoration: none; }
+
+  /* MOBILE */
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .page-header { padding: 120px 24px 60px; }
+    .page-header::after { left: 24px; }
+    .filtros { padding: 24px; }
+    .seminarios-container { padding: 40px 24px 80px; }
+    .seminarios-grid { grid-template-columns: 1fr; }
+    .page-footer { padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">ACOSTA BJJ <span>ACADEMY</span></a>
+  <a href="/" class="btn-nav">← Volver</a>
+</nav>
+
+<!-- HEADER -->
+<div class="page-header">
+  <div class="page-tag">Jonathan Acosta</div>
+  <h1 class="page-title">SEMINARIOS<br>Y VISITAS</h1>
+  <p class="page-subtitle">Trayectoria internacional del Mestre — academias visitadas en Argentina, Paraguay y Brasil.</p>
+  <div class="page-count"><span>13</span> seminarios · 3 países</div>
+</div>
+
+<!-- FILTROS -->
+<div class="filtros">
+  <button class="filtro-btn active" onclick="filtrar('todos')">Todos</button>
+  <button class="filtro-btn" onclick="filtrar('ar')">🇦🇷 Argentina</button>
+  <button class="filtro-btn" onclick="filtrar('py')">🇵🇾 Paraguay</button>
+  <button class="filtro-btn" onclick="filtrar('br')">🇧🇷 Brasil</button>
+</div>
+
+<!-- GRID -->
+<div class="seminarios-container">
+  <div class="seminarios-grid" id="grid">
+
+    <div class="seminario-card" data-pais="ar">
+      <span class="seminario-num">01</span>
+      <span class="seminario-flag">🇦🇷</span>
+      <div class="seminario-fecha">21 · 03 · 2023</div>
+      <div class="seminario-ciudad">Berazategui</div>
+      <div class="seminario-pais">Buenos Aires, Argentina</div>
+      <div class="seminario-academia">Academia Warriors</div>
+    </div>
+
+    <div class="seminario-card" data-pais="ar">
+      <span class="seminario-num">02</span>
+      <span class="seminario-flag">🇦🇷</span>
+      <div class="seminario-fecha">07 · 04 · 2024</div>
+      <div class="seminario-ciudad">Berazategui</div>
+      <div class="seminario-pais">Buenos Aires, Argentina</div>
+      <div class="seminario-academia">Academia Warriors</div>
+    </div>
+
+    <div class="seminario-card" data-pais="ar">
+      <span class="seminario-num">03</span>
+      <span class="seminario-flag">🇦🇷</span>
+      <div class="seminario-fecha">21 · 04 · 2024</div>
+      <div class="seminario-ciudad">Posadas</div>
+      <div class="seminario-pais">Misiones, Argentina</div>
+      <div class="seminario-academia">CEPARD — Fed. Misionera de Judo y academias BJJ</div>
+    </div>
+
+    <div class="seminario-card" data-pais="ar">
+      <span class="seminario-num">04</span>
+      <span class="seminario-flag">🇦🇷</span>
+      <div class="seminario-fecha">27 · 04 · 2024</div>
+      <div class="seminario-ciudad">Oberá</div>
+      <div class="seminario-pais">Misiones, Argentina</div>
+      <div class="seminario-academia">BJJ Oberá Team</div>
+    </div>
+
+    <div class="seminario-card" data-pais="py">
+      <span class="seminario-num">05</span>
+      <span class="seminario-flag">🇵🇾</span>
+      <div class="seminario-fecha">30 · 06 · 2025</div>
+      <div class="seminario-ciudad">Ciudad del Este</div>
+      <div class="seminario-pais">Paraguay</div>
+      <div class="seminario-academia">La Roca Gym</div>
+    </div>
+
+    <div class="seminario-card" data-pais="py">
+      <span class="seminario-num">06</span>
+      <span class="seminario-flag">🇵🇾</span>
+      <div class="seminario-fecha">31 · 06 · 2025</div>
+      <div class="seminario-ciudad">Ciudad del Este</div>
+      <div class="seminario-pais">Paraguay</div>
+      <div class="seminario-academia">Gracie Barra</div>
+    </div>
+
+    <div class="seminario-card" data-pais="ar">
+      <span class="seminario-num">07</span>
+      <span class="seminario-flag">🇦🇷</span>
+      <div class="seminario-fecha">18 · 07 · 2025</div>
+      <div class="seminario-ciudad">Posadas</div>
+      <div class="seminario-pais">Misiones, Argentina</div>
+      <div class="seminario-academia">Academia AGJ</div>
+    </div>
+
+    <div class="seminario-card" data-pais="ar">
+      <span class="seminario-num">08</span>
+      <span class="seminario-flag">🇦🇷</span>
+      <div class="seminario-fecha">08 · 11 · 2025</div>
+      <div class="seminario-ciudad">Resistencia</div>
+      <div class="seminario-pais">Chaco, Argentina</div>
+      <div class="seminario-academia">SM Team</div>
+    </div>
+
+    <div class="seminario-card" data-pais="br">
+      <span class="seminario-num">09</span>
+      <span class="seminario-flag">🇧🇷</span>
+      <div class="seminario-fecha">17 · 11 · 2025</div>
+      <div class="seminario-ciudad">Torres</div>
+      <div class="seminario-pais">Brasil</div>
+      <div class="seminario-academia">Gracie Barra</div>
+    </div>
+
+    <div class="seminario-card" data-pais="br">
+      <span class="seminario-num">10</span>
+      <span class="seminario-flag">🇧🇷</span>
+      <div class="seminario-fecha">19 · 11 · 2025</div>
+      <div class="seminario-ciudad">Torres</div>
+      <div class="seminario-pais">Río Grande do Sul, Brasil</div>
+      <div class="seminario-academia">Lotus Jiu Jitsu Torres</div>
+    </div>
+
+    <div class="seminario-card" data-pais="br">
+      <span class="seminario-num">11</span>
+      <span class="seminario-flag">🇧🇷</span>
+      <div class="seminario-fecha">22 · 11 · 2025</div>
+      <div class="seminario-ciudad">Florianópolis</div>
+      <div class="seminario-pais">Playa Inglesa, Brasil</div>
+      <div class="seminario-academia">Nick Jiu Jitsu</div>
+    </div>
+
+    <div class="seminario-card" data-pais="br">
+      <span class="seminario-num">12</span>
+      <span class="seminario-flag">🇧🇷</span>
+      <div class="seminario-fecha">25 · 11 · 2025</div>
+      <div class="seminario-ciudad">Florianópolis</div>
+      <div class="seminario-pais">Playa Inglesa, Brasil</div>
+      <div class="seminario-academia">Nick Jiu Jitsu</div>
+    </div>
+
+    <div class="seminario-card" data-pais="br">
+      <span class="seminario-num">13</span>
+      <span class="seminario-flag">🇧🇷</span>
+      <div class="seminario-fecha">28 · 11 · 2026</div>
+      <div class="seminario-ciudad">Floripa — Campeche</div>
+      <div class="seminario-pais">Brasil</div>
+      <div class="seminario-academia">Academia Alliance</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="page-footer">
+  <a href="/">← Volver a ACOSTA BJJ ACADEMY</a>
+</div>
+
+<script>
+  function filtrar(pais) {
+    const cards = document.querySelectorAll('.seminario-card');
+    const btns = document.querySelectorAll('.filtro-btn');
+    btns.forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    cards.forEach(card => {
+      if (pais === 'todos' || card.dataset.pais === pais) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>

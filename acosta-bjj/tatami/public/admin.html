@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACOSTA BJJ — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --negro: #080808;
+    --carbon: #0f0f0f;
+    --grafito: #161616;
+    --grafito2: #1e1e1e;
+    --borde: #272727;
+    --borde2: #353535;
+    --rojo: #c0392b;
+    --rojo-vivo: #e74c3c;
+    --rojo-bg: rgba(192,57,43,0.1);
+    --verde: #1a9e5c;
+    --verde-bg: rgba(26,158,92,0.12);
+    --amarillo: #d4a017;
+    --amarillo-bg: rgba(212,160,23,0.12);
+    --blanco: #f0ece4;
+    --gris: #777;
+    --gris2: #444;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--negro);
+    color: var(--blanco);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    display: flex;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background: var(--carbon);
+    border-right: 1px solid var(--borde);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+  }
+
+  .sidebar-logo {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--borde);
+  }
+  .logo-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.12em;
+  }
+  .logo-text span { color: var(--rojo); }
+  .logo-sub {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gris);
+    margin-top: 4px;
+  }
+
+  .nav-section {
+    padding: 20px 0 8px;
+  }
+  .nav-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gris2);
+    padding: 0 24px 8px;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 24px;
+    font-size: 0.8rem;
+    color: var(--gris);
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    transition: all 0.2s;
+    background: none;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+    width: 100%;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .nav-item:hover { color: var(--blanco); background: var(--grafito); }
+  .nav-item.active {
+    color: var(--blanco);
+    border-left-color: var(--rojo);
+    background: var(--rojo-bg);
+  }
+  .nav-icon { font-size: 0.9rem; width: 18px; text-align: center; }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 20px 24px;
+    border-top: 1px solid var(--borde);
+  }
+  .admin-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .admin-dot {
+    width: 8px; height: 8px;
+    background: var(--verde);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--verde);
+  }
+  .admin-name { font-size: 0.78rem; font-weight: 500; }
+  .admin-role { font-size: 0.62rem; color: var(--gris); letter-spacing: 0.1em; text-transform: uppercase; }
+  .btn-logout {
+    width: 100%;
+    padding: 9px;
+    background: none;
+    border: 1px solid var(--borde);
+    color: var(--gris);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .btn-logout:hover { border-color: var(--rojo); color: var(--rojo); }
+
+  /* ── MAIN ── */
+  .main {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    background: rgba(8,8,8,0.97);
+    border-bottom: 1px solid var(--borde);
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+  .topbar-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+  }
+  .topbar-actions { display: flex; gap: 10px; }
+
+  .btn-primary {
+    background: var(--rojo);
+    color: var(--blanco);
+    border: none;
+    padding: 10px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--rojo-vivo); }
+
+  .btn-ghost {
+    background: none;
+    color: var(--gris);
+    border: 1px solid var(--borde);
+    padding: 10px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--gris); color: var(--blanco); }
+
+  .content { padding: 36px 40px; flex: 1; }
+
+  /* ── PÁGINAS ── */
+  .page { display: none; }
+  .page.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── STATS CARDS ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-bottom: 36px;
+  }
+  .stat-card {
+    background: var(--carbon);
+    border: 1px solid var(--borde);
+    padding: 24px 28px;
+  }
+  .stat-icon { font-size: 1.2rem; margin-bottom: 12px; opacity: 0.6; }
+  .stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gris); }
+
+  /* ── TABLA GENÉRICA ── */
+  .table-wrap {
+    background: var(--carbon);
+    border: 1px solid var(--borde);
+    overflow: hidden;
+  }
+  .table-header {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--borde);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .table-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
+  }
+  .table-search {
+    background: var(--grafito);
+    border: 1px solid var(--borde);
+    color: var(--blanco);
+    padding: 8px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    outline: none;
+    width: 220px;
+    transition: border-color 0.2s;
+  }
+  .table-search:focus { border-color: var(--rojo); }
+  .table-search::placeholder { color: var(--gris2); }
+
+  table { width: 100%; border-collapse: collapse; }
+  thead { background: var(--grafito); }
+  th {
+    text-align: left;
+    padding: 12px 20px;
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gris);
+    font-weight: 400;
+    border-bottom: 1px solid var(--borde);
+  }
+  td {
+    padding: 14px 20px;
+    font-size: 0.82rem;
+    border-bottom: 1px solid var(--borde);
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--grafito); }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 2px;
+  }
+  .badge-green { background: var(--verde-bg); color: #2ecc71; border: 1px solid rgba(46,204,113,0.2); }
+  .badge-red   { background: var(--rojo-bg);  color: var(--rojo-vivo); border: 1px solid rgba(192,57,43,0.2); }
+  .badge-amber { background: var(--amarillo-bg); color: var(--amarillo); border: 1px solid rgba(212,160,23,0.2); }
+  .badge-gray  { background: var(--grafito2); color: var(--gris); border: 1px solid var(--borde); }
+
+  .action-btns { display: flex; gap: 6px; }
+  .btn-action {
+    padding: 5px 12px;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 1px solid var(--borde);
+    background: none;
+    color: var(--gris);
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.18s;
+  }
+  .btn-action:hover { border-color: var(--blanco); color: var(--blanco); }
+  .btn-action.danger:hover { border-color: var(--rojo); color: var(--rojo); }
+  .btn-action.success { border-color: var(--verde); color: var(--verde); }
+
+  /* ── MODAL FORM ── */
+  .modal-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.88);
+    z-index: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    backdrop-filter: blur(8px);
+  }
+  .modal-bg.open { opacity: 1; pointer-events: all; }
+
+  .modal-box {
+    background: var(--carbon);
+    border: 1px solid var(--borde2);
+    width: 540px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: translateY(16px);
+    transition: transform 0.3s;
+  }
+  .modal-bg.open .modal-box { transform: translateY(0); }
+
+  .modal-head {
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid var(--borde);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: var(--carbon);
+    z-index: 1;
+  }
+  .modal-head-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.06em;
+  }
+  .modal-x {
+    background: none;
+    border: none;
+    color: var(--gris);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    padding: 4px 8px;
+  }
+  .modal-x:hover { color: var(--blanco); }
+
+  .modal-body { padding: 28px; }
+
+  .form-row { margin-bottom: 20px; }
+  .form-row.two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  label {
+    display: block;
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gris);
+    margin-bottom: 8px;
+  }
+
+  input[type="text"], input[type="password"], input[type="number"],
+  select, textarea {
+    width: 100%;
+    background: var(--grafito);
+    border: 1px solid var(--borde);
+    color: var(--blanco);
+    padding: 12px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.2s;
+    border-radius: 0;
+    -webkit-appearance: none;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--rojo); }
+  input::placeholder, textarea::placeholder { color: var(--gris2); }
+  select option { background: var(--grafito); }
+  textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+
+  .form-hint-text {
+    font-size: 0.68rem;
+    color: var(--gris2);
+    margin-top: 6px;
+  }
+
+  .modal-foot {
+    padding: 20px 28px;
+    border-top: 1px solid var(--borde);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    position: sticky;
+    bottom: 0;
+    background: var(--carbon);
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    background: var(--grafito2);
+    border: 1px solid var(--borde2);
+    border-left: 3px solid var(--verde);
+    padding: 14px 22px;
+    font-size: 0.82rem;
+    z-index: 2000;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.35s ease;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.error { border-left-color: var(--rojo); }
+
+  /* ── EMPTY STATE ── */
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--gris2);
+  }
+  .empty-icon { font-size: 2.5rem; margin-bottom: 16px; opacity: 0.4; }
+  .empty-text { font-size: 0.85rem; }
+
+  /* ── PROGRESS BAR EN TABLA ── */
+  .mini-progress {
+    height: 3px;
+    background: var(--borde);
+    width: 100px;
+    margin-top: 4px;
+  }
+  .mini-fill { height: 100%; background: var(--rojo); transition: width 0.4s; }
+
+  @media (max-width: 900px) {
+    .stats-grid { grid-template-columns: repeat(2,1fr); }
+    .content { padding: 24px 20px; }
+    .topbar { padding: 14px 20px; }
+    .modal-box { width: 94%; }
+    .form-row.two { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text">ACOSTA BJJ <span>ACADEMY</span></div>
+    <div class="logo-sub">Panel de administración</div>
+  </div>
+
+  <nav class="nav-section">
+    <div class="nav-label">General</div>
+    <button class="nav-item active" onclick="showPage('dashboard', this)">
+      <span class="nav-icon">▤</span> Dashboard
+    </button>
+    <button class="nav-item" onclick="showPage('videos', this)">
+      <span class="nav-icon">▶</span> Videos
+    </button>
+    <button class="nav-item" onclick="showPage('usuarios', this)">
+      <span class="nav-icon">◈</span> Usuarios
+    </button>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="admin-badge">
+      <div class="admin-dot"></div>
+      <div>
+        <div class="admin-name">Administrador</div>
+        <div class="admin-role">Acceso total</div>
+      </div>
+    </div>
+    <button class="btn-logout">← Salir</button>
+  </div>
+</aside>
+
+<!-- ── MAIN ── -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-title" id="topbarTitle">Dashboard</div>
+    <div class="topbar-actions" id="topbarActions"></div>
+  </div>
+
+  <div class="content">
+
+    <!-- ════════════ DASHBOARD ════════════ -->
+    <div class="page active" id="page-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">▶</div>
+          <div class="stat-val" id="stat-videos">0</div>
+          <div class="stat-label">Videos publicados</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">◈</div>
+          <div class="stat-val" id="stat-users">0</div>
+          <div class="stat-label">Alumnos activos</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✓</div>
+          <div class="stat-val" id="stat-completions">0</div>
+          <div class="stat-label">Clases completadas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🔒</div>
+          <div class="stat-val" id="stat-inactive">0</div>
+          <div class="stat-label">Usuarios inactivos</div>
+        </div>
+      </div>
+
+      <!-- Últimos usuarios -->
+      <div class="table-wrap">
+        <div class="table-header">
+          <div class="table-title">Actividad reciente</div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Alumno</th>
+              <th>Último video visto</th>
+              <th>Progreso</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody id="dashboardActivity"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════════════ VIDEOS ════════════ -->
+    <div class="page" id="page-videos">
+      <div class="table-wrap">
+        <div class="table-header">
+          <div class="table-title">Biblioteca de videos</div>
+          <input class="table-search" type="text" placeholder="Buscar video..." oninput="filterVideos(this.value)">
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Título</th>
+              <th>Descripción</th>
+              <th>Nivel</th>
+              <th>Duración</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="videosTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════════════ USUARIOS ════════════ -->
+    <div class="page" id="page-usuarios">
+      <div class="table-wrap">
+        <div class="table-header">
+          <div class="table-title">Alumnos registrados</div>
+          <input class="table-search" type="text" placeholder="Buscar alumno..." oninput="filterUsers(this.value)">
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Usuario</th>
+              <th>Nivel acceso</th>
+              <th>Progreso</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="usersTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════ MODAL EDITAR/CREAR VIDEO ════════ -->
+<div class="modal-bg" id="modalVideo">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-head-title" id="modalVideoTitle">Nuevo video</div>
+      <button class="modal-x" onclick="closeModal('modalVideo')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="videoId">
+      <div class="form-row">
+        <label>Título del video</label>
+        <input type="text" id="vTitulo" placeholder="Ej: Llave de brazo — Juji Gatame">
+      </div>
+      <div class="form-row">
+        <label>Descripción (la ven los alumnos)</label>
+        <textarea id="vDesc" placeholder="Explicá brevemente de qué trata la técnica..."></textarea>
+      </div>
+      <div class="form-row two">
+        <div>
+          <label>Nivel</label>
+          <select id="vNivel">
+            <option value="1">1 — Fundamentos</option>
+            <option value="2">2 — Control</option>
+            <option value="3">3 — Dominio</option>
+          </select>
+        </div>
+        <div>
+          <label>Duración</label>
+          <input type="text" id="vDuracion" placeholder="Ej: 12 min">
+        </div>
+      </div>
+      <div class="form-row">
+        <label>ID de Vimeo</label>
+        <input type="text" id="vVimeoId" placeholder="Ej: 123456789">
+        <div class="form-hint-text">El número que aparece en la URL de tu video en Vimeo. Ej: vimeo.com/<strong>123456789</strong></div>
+      </div>
+      <div class="form-row two">
+        <div>
+          <label>Video correlativo (ID)</label>
+          <input type="number" id="vPairId" placeholder="Ej: 5 (número de técnica)">
+        </div>
+        <div>
+          <label>Estado</label>
+          <select id="vEstado">
+            <option value="publicado">Publicado</option>
+            <option value="borrador">Borrador</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="closeModal('modalVideo')">Cancelar</button>
+      <button class="btn-primary" onclick="saveVideo()">Guardar video</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ MODAL CREAR/EDITAR USUARIO ════════ -->
+<div class="modal-bg" id="modalUser">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-head-title" id="modalUserTitle">Nuevo alumno</div>
+      <button class="modal-x" onclick="closeModal('modalUser')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="userId">
+      <div class="form-row">
+        <label>Nombre completo</label>
+        <input type="text" id="uNombre" placeholder="Ej: Marcos Rodríguez">
+      </div>
+      <div class="form-row two">
+        <div>
+          <label>Usuario (para login)</label>
+          <input type="text" id="uUsername" placeholder="Ej: marcos_r">
+        </div>
+        <div>
+          <label>Contraseña</label>
+          <input type="password" id="uPassword" placeholder="Mínimo 6 caracteres">
+        </div>
+      </div>
+      <div class="form-row two">
+        <div>
+          <label>Nivel de acceso</label>
+          <select id="uNivel">
+            <option value="1">Fundamentos (Nivel 1)</option>
+            <option value="2">Control (Nivel 2)</option>
+            <option value="3">Dominio (Nivel 3 — todo)</option>
+          </select>
+        </div>
+        <div>
+          <label>Estado</label>
+          <select id="uEstado">
+            <option value="activo">Activo</option>
+            <option value="inactivo">Inactivo</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <label>Notas internas (no las ve el alumno)</label>
+        <textarea id="uNotas" placeholder="Ej: Pagó el 10/03, WhatsApp: 3764-..."></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="closeModal('modalUser')">Cancelar</button>
+      <button class="btn-primary" onclick="saveUser()">Guardar alumno</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+let videos = [];
+let users = [];
+let editingVideoId = null;
+let editingUserId = null;
+
+// ── API helper ────────────────────────────────────────────────
+async function api(url, method = 'GET', body = null) {
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(url, opts);
+  return { ok: res.ok, status: res.status, data: await res.json() };
+}
+
+async function cargarVideos() {
+  const r = await api('/api/videos/admin/todos');
+  if (r.ok) { videos = r.data; renderVideos(); renderDashboard(); }
+}
+async function cargarUsuarios() {
+  const r = await api('/api/usuarios');
+  if (r.ok) { users = r.data; renderUsers(); renderDashboard(); }
+}
+
+// ═══════════════════════════════════════════════
+// NAVEGACIÓN
+// ═══════════════════════════════════════════════
+function showPage(page, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  btn.classList.add('active');
+
+  const titles = { dashboard:'Dashboard', videos:'Videos', usuarios:'Usuarios' };
+  document.getElementById('topbarTitle').textContent = titles[page];
+
+  // Botones de acción por página
+  const actions = document.getElementById('topbarActions');
+  if (page === 'videos') {
+    actions.innerHTML = `<button class="btn-primary" onclick="openVideoModal()">+ Agregar video</button>`;
+    cargarVideos();
+  } else if (page === 'usuarios') {
+    actions.innerHTML = `<button class="btn-primary" onclick="openUserModal()">+ Nuevo alumno</button>`;
+    cargarUsuarios();
+  } else {
+    actions.innerHTML = '';
+    renderDashboard();
+  }
+}
+
+// ═══════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════
+function renderDashboard() {
+  const activeUsers = users.filter(u => u.estado === 'activo').length;
+  const inactiveUsers = users.filter(u => u.estado === 'inactivo').length;
+  const pubVideos = videos.filter(v => v.estado === 'publicado').length;
+  const completions = users.reduce((acc, u) => acc + Math.round(u.progreso / 100 * pubVideos), 0);
+
+  document.getElementById('stat-videos').textContent = pubVideos;
+  document.getElementById('stat-users').textContent = activeUsers;
+  document.getElementById('stat-completions').textContent = completions;
+  document.getElementById('stat-inactive').textContent = inactiveUsers;
+
+  const tbody = document.getElementById('dashboardActivity');
+  tbody.innerHTML = users.map(u => `
+    <tr>
+      <td><strong>${u.nombre}</strong><br><span style="font-size:0.7rem;color:var(--gris)">@${u.username}</span></td>
+      <td style="color:var(--gris);font-size:0.8rem">${u.lastVideo || '—'}</td>
+      <td>
+        <span style="font-size:0.78rem">${u.progreso}%</span>
+        <div class="mini-progress"><div class="mini-fill" style="width:${u.progreso}%"></div></div>
+      </td>
+      <td><span class="badge ${u.estado==='activo'?'badge-green':'badge-red'}">${u.estado}</span></td>
+    </tr>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════
+// VIDEOS — TABLA
+// ═══════════════════════════════════════════════
+function renderVideos(filter='') {
+  const filtered = videos.filter(v =>
+    v.title.toLowerCase().includes(filter.toLowerCase()) ||
+    v.desc.toLowerCase().includes(filter.toLowerCase())
+  );
+  const tbody = document.getElementById('videosTable');
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty"><div class="empty-icon">▶</div><div class="empty-text">No hay videos</div></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = filtered.map(v => `
+    <tr>
+      <td style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--gris)">${v.num}</td>
+      <td><strong style="font-size:0.85rem">${v.title}</strong></td>
+      <td style="color:var(--gris);font-size:0.78rem;max-width:220px;line-height:1.5">${v.descripcion ? v.descripcion.substring(0,80) : ""}${v.descripcion && v.descripcion.length>80?'…':''}</td>
+      <td><span class="badge badge-gray">${['','Fundamentos','Control','Dominio'][v.nivel]}</span></td>
+      <td style="color:var(--gris);font-size:0.78rem">${v.duracion}</td>
+      <td><span class="badge ${v.estado==='publicado'?'badge-green':'badge-amber'}">${v.estado}</span></td>
+      <td>
+        <div class="action-btns">
+          <button class="btn-action" onclick="editVideo(${v.id})">Editar</button>
+          <button class="btn-action danger" onclick="deleteVideo(${v.id})">Eliminar</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function filterVideos(q) { renderVideos(q); }
+
+// ═══════════════════════════════════════════════
+// MODAL VIDEO
+// ═══════════════════════════════════════════════
+function openVideoModal(id = null) {
+  editingVideoId = id;
+  document.getElementById('modalVideoTitle').textContent = id !== null ? 'Editar video' : 'Nuevo video';
+
+  if (id !== null) {
+    const v = videos.find(x => x.id === id);
+    document.getElementById('videoId').value = v.id;
+    document.getElementById('vTitulo').value = v.title;
+    document.getElementById('vDesc').value = v.descripcion || '' || '';
+    document.getElementById('vNivel').value = v.nivel;
+    document.getElementById('vDuracion').value = v.duracion;
+    document.getElementById('vVimeoId').value = v.vimeoId || '';
+    document.getElementById('vPairId').value = v.pairId !== null && v.pairId !== undefined ? v.pairId : '';
+    document.getElementById('vEstado').value = v.estado;
+  } else {
+    document.getElementById('videoId').value = '';
+    document.getElementById('vTitulo').value = '';
+    document.getElementById('vDesc').value = '';
+    document.getElementById('vNivel').value = 1;
+    document.getElementById('vDuracion').value = '';
+    document.getElementById('vVimeoId').value = '';
+    document.getElementById('vPairId').value = '';
+    document.getElementById('vEstado').value = 'publicado';
+  }
+  openModal('modalVideo');
+}
+
+function editVideo(id) { openVideoModal(id); }
+
+async function saveVideo() {
+  const titulo = document.getElementById('vTitulo').value.trim();
+  if (!titulo) { showToast('El título es obligatorio', true); return; }
+
+  const body = {
+    title: titulo,
+    descripcion: document.getElementById('vDesc').value.trim(),
+    nivel: parseInt(document.getElementById('vNivel').value),
+    duracion: document.getElementById('vDuracion').value.trim(),
+    vimeo_id: document.getElementById('vVimeoId').value.trim(),
+    pair_id: document.getElementById('vPairId').value !== '' ? parseInt(document.getElementById('vPairId').value) : null,
+    estado: document.getElementById('vEstado').value,
+  };
+
+  let r;
+  if (editingVideoId !== null) {
+    r = await api('/api/videos/' + editingVideoId, 'PUT', body);
+  } else {
+    r = await api('/api/videos', 'POST', body);
+  }
+
+  if (r.ok) {
+    showToast(editingVideoId !== null ? 'Video actualizado ✓' : 'Video agregado ✓');
+    closeModal('modalVideo');
+    cargarVideos();
+  } else {
+    showToast(r.data.error || 'Error al guardar', true);
+  }
+}
+
+async function deleteVideo(id) {
+  if (!confirm('¿Eliminar este video? Esta acción no se puede deshacer.')) return;
+  const r = await api('/api/videos/' + id, 'DELETE');
+  if (r.ok) { showToast('Video eliminado'); cargarVideos(); }
+  else showToast('Error al eliminar', true);
+}
+
+// ═══════════════════════════════════════════════
+// USUARIOS — TABLA
+// ═══════════════════════════════════════════════
+function renderUsers(filter='') {
+  const filtered = users.filter(u =>
+    u.nombre.toLowerCase().includes(filter.toLowerCase()) ||
+    u.username.toLowerCase().includes(filter.toLowerCase())
+  );
+  const tbody = document.getElementById('usersTable');
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="empty-icon">◈</div><div class="empty-text">No hay alumnos</div></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = filtered.map(u => `
+    <tr>
+      <td><strong>${u.nombre}</strong>${u.notas ? `<br><span style="font-size:0.68rem;color:var(--gris2)">${u.notas}</span>` : ''}</td>
+      <td style="font-size:0.8rem;color:var(--gris)">@${u.username}</td>
+      <td><span class="badge badge-gray">${['','Nivel 1','Nivel 2','Nivel 3'][u.nivel]}</span></td>
+      <td>
+        <span style="font-size:0.78rem">${u.progreso}%</span>
+        <div class="mini-progress"><div class="mini-fill" style="width:${u.progreso}%"></div></div>
+      </td>
+      <td><span class="badge ${u.estado==='activo'?'badge-green':'badge-red'}">${u.estado}</span></td>
+      <td>
+        <div class="action-btns">
+          <button class="btn-action" onclick="editUser(${u.id})">Editar</button>
+          <button class="btn-action ${u.estado==='activo'?'danger':''}" onclick="toggleUser(${u.id})">
+            ${u.estado==='activo'?'Desactivar':'Activar'}
+          </button>
+          <button class="btn-action danger" onclick="deleteUser(${u.id})">Eliminar</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function filterUsers(q) { renderUsers(q); }
+
+// ═══════════════════════════════════════════════
+// MODAL USUARIO
+// ═══════════════════════════════════════════════
+function openUserModal(id = null) {
+  editingUserId = id;
+  document.getElementById('modalUserTitle').textContent = id !== null ? 'Editar alumno' : 'Nuevo alumno';
+
+  if (id !== null) {
+    const u = users.find(x => x.id === id);
+    document.getElementById('userId').value = u.id;
+    document.getElementById('uNombre').value = u.nombre;
+    document.getElementById('uUsername').value = u.username;
+    document.getElementById('uPassword').value = '';
+    document.getElementById('uNivel').value = u.nivel;
+    document.getElementById('uEstado').value = u.estado;
+    document.getElementById('uNotas').value = u.notas || '';
+  } else {
+    ['userId','uNombre','uUsername','uPassword','uNotas'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('uNivel').value = 1;
+    document.getElementById('uEstado').value = 'activo';
+  }
+  openModal('modalUser');
+}
+
+function editUser(id) { openUserModal(id); }
+
+async function saveUser() {
+  const nombre = document.getElementById('uNombre').value.trim();
+  const username = document.getElementById('uUsername').value.trim();
+  const password = document.getElementById('uPassword').value.trim();
+
+  if (!nombre || !username) { showToast('Nombre y usuario son obligatorios', true); return; }
+  if (editingUserId === null && !password) { showToast('La contraseña es obligatoria para un nuevo alumno', true); return; }
+
+  const body = {
+    nombre, username,
+    nivel: parseInt(document.getElementById('uNivel').value),
+    estado: document.getElementById('uEstado').value,
+    notas: document.getElementById('uNotas').value.trim(),
+  };
+  if (password) body.password = password;
+
+  let r;
+  if (editingUserId !== null) {
+    r = await api('/api/usuarios/' + editingUserId, 'PUT', body);
+  } else {
+    r = await api('/api/usuarios', 'POST', body);
+  }
+
+  if (r.ok) {
+    showToast(editingUserId !== null ? 'Alumno actualizado ✓' : 'Alumno creado ✓');
+    closeModal('modalUser');
+    cargarUsuarios();
+  } else {
+    showToast(r.data.error || 'Error al guardar', true);
+  }
+}
+
+async function toggleUser(id) {
+  const r = await api('/api/usuarios/' + id + '/toggle', 'PATCH');
+  if (r.ok) {
+    showToast('Estado actualizado ✓');
+    cargarUsuarios();
+  } else showToast('Error', true);
+}
+
+async function deleteUser(id) {
+  if (!confirm('¿Eliminar este alumno? Perderá el acceso inmediatamente.')) return;
+  const r = await api('/api/usuarios/' + id, 'DELETE');
+  if (r.ok) { showToast('Alumno eliminado'); cargarUsuarios(); }
+  else showToast('Error al eliminar', true);
+}
+
+// ═══════════════════════════════════════════════
+// MODALES Y TOAST
+// ═══════════════════════════════════════════════
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.querySelectorAll('.modal-bg').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-bg.open').forEach(m => closeModal(m.id));
+});
+
+let toastTimer;
+function showToast(msg, isError = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isError ? ' error' : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ─── INIT ───────────────────────────────────────
+async function init() {
+  const r = await api('/api/me');
+  if (!r.ok || !r.data.logueado) { window.location.href = '/'; return; }
+  if (!r.data.esAdmin) { window.location.href = '/clases'; return; }
+  await cargarVideos();
+  await cargarUsuarios();
+}
+
+// Logout
+document.querySelector('.btn-logout').addEventListener('click', async () => {
+  await api('/api/logout', 'POST');
+  window.location.href = '/';
+});
+
+init();
+</script>
+</body>
+</html>
