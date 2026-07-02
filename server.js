@@ -48,6 +48,10 @@ app.get('/seminarios', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'seminarios.html'));
 });
 
+app.get('/mestre', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'mestre.html'));
+});
+
 // Ruta 404
 app.use((req, res) => {
   res.status(404).json({ error: 'Ruta no encontrada.' });
